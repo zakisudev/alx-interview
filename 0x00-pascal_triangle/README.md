@@ -1,6 +1,4 @@
-# Repository Name
-
-ALX-INTERVIEW
+# PASCAL_TRIANGLE
 
 ## Description
 
@@ -19,7 +17,8 @@ To use this project, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/zakisudev/alx-interview.git`
 2. Navigate to the project directory: `cd 0x00-pascal_triangle`
-3. Run 0-main.py to the magic. You can use your own 'n' value inside [print_triangle(pascal_triangle(5))]
+3. Make sure both 0-pascal_triangle.py and 0-main.py are executable [run (chmod +x 0-pascal_triangle.py 0-main.py)]
+4. Run `./0-main.py` to see the magic. You can use your own 'n' value inside [print_triangle(pascal_triangle(5))]
 
 ## Usage
 
