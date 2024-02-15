@@ -40,7 +40,6 @@ function getMovieCharacters (movieId) {
 }
 
 function printCharacters (characters, movieTitle) {
-  console.log(`Characters in ${movieTitle}:`);
   for (const character of characters) {
     console.log(character);
   }
