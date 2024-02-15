@@ -1,49 +1,53 @@
 #!/usr/bin/node
-/*
-    Star Wars Characters
-*/
 
 const request = require('request');
+const movieId = process.argv[2];
 
-function makeRequest(url) {
-  return new Promise((resolve, reject) => {
-    request(url, (error, response, body) => {
-      if (error) {
-        reject(error);
+function getMovieCharacters(movieId) {
+  const filmsUrl = 'https://swapi-api.alx-tools.com/api/films';
+
+  request.get(filmsUrl, (error, response, body) => {
+    if (response.statusCode === 200) {
+      const filmsData = JSON.parse(body);
+      const movieData = filmsData.results.find(
+        (film) => film.episode_id.toString() === movieId
+      );
+
+      if (movieData) {
+        const charactersUrls = movieData.characters;
+        const characters = [];
+
+        for (const charUrl of charactersUrls) {
+          request.get(charUrl, (error, response, body) => {
+            if (response.statusCode === 200) {
+              const characterData = JSON.parse(body);
+              characters.push(characterData.name);
+              if (characters.length === charactersUrls.length) {
+                printCharacters(characters, movieData.title);
+              }
+            } else {
+              console.log(`Error: ${response.statusCode}`);
+            }
+          });
+        }
       } else {
-        resolve(JSON.parse(body));
+        console.log(`Movie ID ${movieId} not found.`);
       }
-    });
+    } else {
+      console.log(`Error: ${response.statusCode}`);
+    }
   });
 }
 
-async function main() {
-  if (process.argv.length < 3) {
-    console.log('Usage: Movie ID is required');
-    return;
-  }
-
-  const movieID = Number(process.argv[2]);
-  if (!movieID) {
-    console.log('Movie ID must be a number');
-    return;
-  }
-
-  const movieUrl = `https://swapi-api.alx-tools.com/api/films/${movieID}/`;
-
-  try {
-    const film = await makeRequest(movieUrl);
-    try {
-      for (const url of film.characters) {
-        const character = await makeRequest(url);
-        console.log(character.name);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
-  } catch (error) {
-    throw new Error(error);
+function printCharacters(characters, movieTitle) {
+  console.log(`Characters in ${movieTitle}:`);
+  for (const character of characters) {
+    console.log(character);
   }
 }
 
-main();
+if (movieId) {
+  getMovieCharacters(movieId);
+} else {
+  console.log('Usage: node 0-starwars_characters.js [Movie ID]');
+}
