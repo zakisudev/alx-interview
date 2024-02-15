@@ -3,10 +3,10 @@
 const request = require('request');
 const movieId = process.argv[2];
 
-function getMovieCharacters(movieId) {
+function getMovieCharacters (movieId) {
   const filmsUrl = 'https://swapi-api.alx-tools.com/api/films';
 
-  request.get(filmsUrl, (error, response, body) => {
+  request.get(filmsUrl, (_, response, body) => {
     if (response.statusCode === 200) {
       const filmsData = JSON.parse(body);
       const movieData = filmsData.results.find(
@@ -18,7 +18,7 @@ function getMovieCharacters(movieId) {
         const characters = [];
 
         for (const charUrl of charactersUrls) {
-          request.get(charUrl, (error, response, body) => {
+          request.get(charUrl, (_, response, body) => {
             if (response.statusCode === 200) {
               const characterData = JSON.parse(body);
               characters.push(characterData.name);
@@ -39,7 +39,7 @@ function getMovieCharacters(movieId) {
   });
 }
 
-function printCharacters(characters, movieTitle) {
+function printCharacters (characters, movieTitle) {
   console.log(`Characters in ${movieTitle}:`);
   for (const character of characters) {
     console.log(character);
